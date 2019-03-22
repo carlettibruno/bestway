@@ -21,7 +21,7 @@ public class App {
 	
 	static int NO_WAY = 0;
 	
-	static int FINISH = -1;
+//	static int FINISH = -1;
 	
 	int[][] values = new int[MAX][MAX];
 	
@@ -41,15 +41,19 @@ public class App {
 	    		ways.forEach(nw -> way.addWay(nw));
 			}
     	}
+    	
+    	int indexDestination = app.map.indexOf(new Way(new WayId(34, 38), 0));
+    	app.destination = app.map.get(indexDestination);
+    	
     	Instant end = Instant.now();
     	System.out.println("create map interval: " + Duration.between(start, end));
     	
     	Way startpoint = app.map.get(0);
     	List<Way> ways = new ArrayList<>();
-    	app.populateBestLength(startpoint, startpoint.factor, ways);
+    	app.populateBestLength(startpoint, 0, ways);
     	
     	List<Way> route = new ArrayList<>();
-    	app.findBestRoute(route, null);
+    	app.findBestRoute(route, app.destination);
     	
     	System.out.println(route);
     	
@@ -62,13 +66,12 @@ public class App {
     	}
     	System.out.println("Current: " + way);
 //    	writeHtml(way);
-    	way.length = current;
-    	if(way.factor == FINISH) {
-    		destination = way;
+    	way.length = current + way.factor;
+    	if(way.equals(destination)) {
     		System.out.println(way.length);
     		return;
     	}
-    	way.ways.forEach(w -> populateBestLength(w, current + way.factor, ways));
+    	way.ways.forEach(w -> populateBestLength(w, way.length, ways));
 	}
     
     static int lineCounter = 0;
@@ -77,7 +80,7 @@ public class App {
     	Instant start = Instant.now();
     	try {
     		lineCounter = 0;
-			List<String> lines = Files.readAllLines(Paths.get("C:\\imagens\\map.txt"));
+			List<String> lines = Files.readAllLines(Paths.get("/imagens/map.txt"));
 			lines.forEach(l -> values[lineCounter++] = Arrays.asList(l.split("\t")).stream().mapToInt(Integer::parseInt).toArray());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -87,9 +90,6 @@ public class App {
 	}
     
     private void findBestRoute(List<Way> bestRoute, Way way) {
-    	if(way == null) {
-    		way = destination;
-    	}
     	bestRoute.add(way);
     	if(way.length == 1 || way.ways.isEmpty()) {
     		return;
@@ -171,7 +171,7 @@ public class App {
     				r = 0;
     				g = 0;
     				b = 0;	    			
-	    			if(way.factor == FINISH) {
+	    			if(way.equals(destination)) {
 	    				g = 255;
 	    			} else if(way.factor <= 30) {
 	    				g = 180;
@@ -195,118 +195,10 @@ public class App {
     	}
     	sb.append("</table>");
     	try {
-			Files.write(Paths.get("C:\\imagens\\map.html"), sb.toString().getBytes());
+			Files.write(Paths.get("/imagens/map.html"), sb.toString().getBytes());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-    
-    
-    
-//    private static void bestWay(Node start) {
-//    	if(start.num == 9) {
-//    		return;
-//    	}
-//    	for (Node child : start.children) {
-//    		bestWay(child);
-//		}
-//	}
-//    
-//    public static Collection<Node> nodes = new HashSet<>();
-//    
-//    public List<Node> getNodesAround(Integer x, Integer y) {
-//    	List<Node> nodes = new ArrayList<>(4);
-//    	Node left = getNodePosition(x - 1, y);
-//    	if(left != null) 
-//    		nodes.add(left);
-//
-//    	Node right = getNodePosition(x + 1, y);
-//    	if(right != null) 
-//    		nodes.add(right);
-//    	
-//    	Node down = getNodePosition(x, y + 1);
-//    	if(down != null) 
-//    		nodes.add(down);
-//    	
-//    	Node up = getNodePosition(x, y - 1);
-//    	if(up != null) 
-//    		nodes.add(up);
-//    	
-//    	return nodes;
-//    }
-//    
-//    public Node getNodePosition(int x, int y) {
-//    	if(x < 0 || y < 0)
-//    		return null;
-//    	
-//    	Node find = new Node(x, y);
-//    	if(!nodes.contains(find)) 
-//    		return null;
-//    	
-//    	return nodes.stream().filter(n -> n.equals(find)).findFirst().get();
-//    }
-    
-//    private void make() {
-//    	
-//    	for (int y = 0; y < ids.size(); y++) {
-//    		for(int x = 0; x < ids.get(y).size(); x++) {
-//    			if(ids.get(y).get(x).intValue() > 0) {
-//    				final Node node = new Node(x, y);
-//    				nodes.add(node);
-//    				node.children = getNodesAround(x, y);
-//    				node.children.forEach(n -> n.children.add(node));
-//    			}
-//    		}
-//		}
-//    	
-//	}
-//    
-//    class Node {
-//    	List<Node> children = new ArrayList<>(4);
-//    	Integer x;
-//    	Integer y;
-//    	Integer num;
-//    	Integer shorterDistance;
-//		public Node(Integer x, Integer y) {
-//			super();
-//			this.x = x;
-//			this.y = y;
-//		}
-//		@Override
-//		public int hashCode() {
-//			final int prime = 31;
-//			int result = 1;
-//			result = prime * result + getOuterType().hashCode();
-//			result = prime * result + ((x == null) ? 0 : x.hashCode());
-//			result = prime * result + ((y == null) ? 0 : y.hashCode());
-//			return result;
-//		}
-//		@Override
-//		public boolean equals(Object obj) {
-//			if (this == obj)
-//				return true;
-//			if (obj == null)
-//				return false;
-//			if (getClass() != obj.getClass())
-//				return false;
-//			Node other = (Node) obj;
-//			if (!getOuterType().equals(other.getOuterType()))
-//				return false;
-//			if (x == null) {
-//				if (other.x != null)
-//					return false;
-//			} else if (!x.equals(other.x))
-//				return false;
-//			if (y == null) {
-//				if (other.y != null)
-//					return false;
-//			} else if (!y.equals(other.y))
-//				return false;
-//			return true;
-//		}
-//		private App getOuterType() {
-//			return App.this;
-//		}
-//    }
-    
+
 }
