@@ -10,12 +10,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class App {
 	
 	List<Way> map = new ArrayList<Way>();
 	
 	Way destination;
+	
+	int bestLength = -1;
 
 	static int MAX = 40;
 	
@@ -26,6 +29,8 @@ public class App {
 	int[][] values = new int[MAX][MAX];
 	
     public static void main( String[] args ) {
+    	Instant startApp = Instant.now();
+    	
     	App app = new App();
     	
     	app.readValues();
@@ -42,7 +47,7 @@ public class App {
 			}
     	}
     	
-    	int indexDestination = app.map.indexOf(new Way(new WayId(34, 38), 0));
+    	int indexDestination = app.map.indexOf(new Way(new WayId(39, 0), 0));
     	app.destination = app.map.get(indexDestination);
     	
     	Instant end = Instant.now();
@@ -50,18 +55,21 @@ public class App {
     	
     	Way startpoint = app.map.get(0);
     	List<Way> ways = new ArrayList<>();
-    	app.populateBestLength(startpoint, 0, ways);
+    	app.populateBestLength(startpoint, startpoint, 0, ways);
     	
     	List<Way> route = new ArrayList<>();
-    	app.findBestRoute(route, app.destination);
+    	app.findBestRoute(route, app.destination, app.destination);
     	
     	System.out.println(route);
     	
     	app.writeHtml(route);
+    	
+    	Instant endApp = Instant.now();
+    	System.out.println("duration: " + Duration.between(startApp, endApp));    	
     }
     
-    private synchronized void populateBestLength(Way way, int current, List<Way> ways) {
-    	if(way.length > 0 && way.length < current) {
+    private synchronized void populateBestLength(Way way, Way previousWay, int current, List<Way> ways) {
+    	if((way.length > 0 && way.length < current) || (bestLength != -1 && current > bestLength)) {
     		return;
     	}
     	System.out.println("Current: " + way);
@@ -69,9 +77,10 @@ public class App {
     	way.length = current + way.factor;
     	if(way.equals(destination)) {
     		System.out.println(way.length);
+    		this.bestLength = way.length;
     		return;
     	}
-    	way.ways.forEach(w -> populateBestLength(w, way.length, ways));
+    	way.ways.stream().filter(w -> !w.equals(previousWay)).forEach(w -> populateBestLength(w, way, way.length, ways));
 	}
     
     static int lineCounter = 0;
@@ -89,10 +98,13 @@ public class App {
     	System.out.println("readValues interval: " + Duration.between(start, end));
 	}
     
-    private void findBestRoute(List<Way> bestRoute, Way way) {
+    private void findBestRoute(List<Way> bestRoute, Way way, Way previousWay) {
     	bestRoute.add(way);
     	if(way.length == 1 || way.ways.isEmpty()) {
     		return;
+    	}
+    	if(way.equals( new Way(new WayId(39, 15),0) )) {
+    		System.out.println("");
     	}
     	Collections.sort(way.ways, new Comparator<Way>() {
 			@Override
@@ -100,7 +112,12 @@ public class App {
 				return new Integer(o1.length).compareTo(o2.length);
 			}
 		});
-    	findBestRoute(bestRoute, way.ways.get(0));
+    	Optional<Way> nextWay = way.ways.stream().filter(w -> w.length > 0 && !w.equals(previousWay)).findFirst();
+    	if(!nextWay.isPresent()) {
+    		throw new IllegalAccessError("Wrong way: " + way);
+    	}
+    	System.out.println("Current way: "+way+" | Next way: " + nextWay.get());
+    	findBestRoute(bestRoute, nextWay.get(), way);
 	}
     
     private List<Way> getNeighborhoods(int x, int y) {
