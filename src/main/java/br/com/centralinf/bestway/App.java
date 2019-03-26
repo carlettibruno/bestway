@@ -89,7 +89,7 @@ public class App {
     	Instant start = Instant.now();
     	try {
     		lineCounter = 0;
-			List<String> lines = Files.readAllLines(Paths.get("/imagens/map.txt"));
+    		List<String> lines = Files.readAllLines(Paths.get("map.txt"));
 			lines.forEach(l -> values[lineCounter++] = Arrays.asList(l.split("\t")).stream().mapToInt(Integer::parseInt).toArray());
 		} catch (IOException e) {
 			e.printStackTrace();
