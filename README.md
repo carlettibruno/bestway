@@ -1,6 +1,6 @@
 # bestway
 
-Created to training algorithm and have some fun.
+Created for training algorithm and have some fun.
 
 The main idea find the best way given a start and end point.
 
