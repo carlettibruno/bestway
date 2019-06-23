@@ -18,10 +18,11 @@ We can build the map using a text file, like that:
 ## HTML result
 
 For above sample, the result will be:  
-![Bestway Sample](https://www.dropbox.com/s/dl/cw7j129btyqyc93/bestway_sample.png)
+![Bestway Sample](https://raw.githubusercontent.com/carlettibruno/bestway/master/samples/bestway_sample.png)
+
 
 Doing with bigger map with destionation at x=30 and y=19:  
-![Bigger Bestway Sample](https://www.dropbox.com/s/dl/amf64r2mb92op9t/bigger_bestway_sample.png)
+![Bigger Bestway Sample](https://raw.githubusercontent.com/carlettibruno/bestway/master/samples/bigger_bestway_sample.png)
 
 ### HTML color legend:
 **Green:** Destination   
