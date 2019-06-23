@@ -28,7 +28,7 @@ Doing with bigger map with destionation at x=30 and y=19:
 **Green:** Destination   
 **Blue:** "Normal traffic" or "Normal factor  
 **Orange:** "Moderate traffic" or "Moderate factor"  
-**Red:** "Heavy traffic" or "Heavy factor""
+**Red:** "Heavy traffic" or "Heavy factor"
 
 ## The project can be used for
 - to make some games that using this idea.
