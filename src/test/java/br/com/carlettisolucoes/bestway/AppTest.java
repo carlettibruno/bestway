@@ -1,4 +1,4 @@
-package br.com.centralinf.bestway;
+package br.com.carlettisolucoes.bestway;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
