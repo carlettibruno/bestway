@@ -2,36 +2,47 @@ package br.com.carlettisolucoes.bestway;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class Way implements Serializable {
-	
+public class Way implements Serializable, Comparable<Way> {
+
 	private static final long serialVersionUID = 5577974199722246435L;
-	
-	WayId id;
-	
-	int factor;
-	
-	transient int length;
-	
-	List<Way> ways;
+
+	private WayId id;
+
+	private int factor;
+
+	private int length;
+
+	private List<Way> ways;
+
+	public Way(WayId id) {
+		super();
+		this.id = id;
+	}
 
 	public Way(WayId id, int factor) {
 		super();
 		this.id = id;
 		this.factor = factor;
 	}
-	
+
 	public void addWay(Way way) {
-		if(ways == null) {
+		if (ways == null) {
 			ways = new ArrayList<>();
 			ways.add(way);
 		} else {
 			int indexOf = ways.indexOf(way);
-			if(indexOf == -1) {
+			if (indexOf == -1) {
 				ways.add(way);
 			}
 		}
+	}
+
+	public Way getBestWay() {
+		Collections.sort(this.getWays());
+		return this.getWays().get(0);
 	}
 
 	@Override
@@ -61,7 +72,44 @@ public class Way implements Serializable {
 
 	@Override
 	public String toString() {
-		return id + " f=" + factor + "; ways=" + (ways != null ? ways.size() : 0) + "]";
+		return id + " f=" + factor + " len=" + length + "; ways=" + (ways != null ? ways.size() : 0) + "]";
 	}
-	
+
+	public WayId getId() {
+		return id;
+	}
+
+	public void setId(WayId id) {
+		this.id = id;
+	}
+
+	public int getFactor() {
+		return factor;
+	}
+
+	public void setFactor(int factor) {
+		this.factor = factor;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	public List<Way> getWays() {
+		return ways;
+	}
+
+	public void setWays(List<Way> ways) {
+		this.ways = ways;
+	}
+
+	@Override
+	public int compareTo(Way o) {
+		return new Integer(this.getLength()).compareTo(o.getLength());
+	}
+
 }
