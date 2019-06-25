@@ -12,8 +12,6 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <commons.componentid>${version}</commons.componentid>
-        <commons.release.version>${version}</commons.release.version>		
 	</properties>
 
 	<build>
