@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>br.com.centralinf</groupId>
+	<groupId>br.com.carlettisolucoes</groupId>
 	<artifactId>bestway</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>bestway</name>
@@ -12,6 +12,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <commons.componentid>${version}</commons.componentid>
+        <commons.release.version>${version}</commons.release.version>		
 	</properties>
 
 	<build>
@@ -24,6 +26,11 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-build-plugin</artifactId>
+				<version>1.10</version>
+			</plugin>			
 		</plugins>
 	</build>
 
@@ -31,8 +38,8 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.12</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency>		
 	</dependencies>
 </project>

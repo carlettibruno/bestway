@@ -4,6 +4,16 @@ Created for training algorithm and have some fun.
 
 The main idea find the best way given a start and end point.
 
+## The project can be used for
+- to make some games that using this idea.
+- to solve some real problem, given a start point, what is best way, with less or more factors envolved.
+- and many other things that you can imagine for this algorithm
+
+## Executing tests
+<code>
+mvn clean test
+</code>
+
 ## Build the *map.txt*
 We can build the map using a text file, like that:
 
@@ -29,8 +39,3 @@ Doing with bigger map with destionation at x=30 and y=19:
 **Blue:** "Normal traffic" or "Normal factor  
 **Orange:** "Moderate traffic" or "Moderate factor"  
 **Red:** "Heavy traffic" or "Heavy factor"
-
-## The project can be used for
-- to make some games that using this idea.
-- to solve some real problem, given a start point, what is best way, with less or more factor envolved.
-- and many other things that you can imagine for this algorithm

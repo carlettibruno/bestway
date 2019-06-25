@@ -1,13 +1,12 @@
 package br.com.carlettisolucoes.bestway.reader;
 
-import java.io.InputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.carlettisolucoes.bestway.Way;
-import br.com.carlettisolucoes.bestway.WayId;
+import br.com.carlettisolucoes.bestway.way.Way;
+import br.com.carlettisolucoes.bestway.way.WayId;
 
 public abstract class MatrizMap implements MapReader {
 
@@ -19,16 +18,19 @@ public abstract class MatrizMap implements MapReader {
 
 	private List<Way> map;
 
-	private int NO_WAY = 0; // TODO
-
 	protected abstract int[][] values();
+
+	protected abstract Integer noWay();
+
+	private Integer noWay;
 
 	public MatrizMap() {
 		map = new ArrayList<>();
+		this.noWay = noWay();
 	}
 
 	@Override
-	public List<Way> read(InputStream is) {
+	public List<Way> read() {
 		this.values = values();
 		MAX_Y = this.values.length;
 		MAX_X = this.values[0].length;
@@ -81,7 +83,7 @@ public abstract class MatrizMap implements MapReader {
 
 	public Way getWay(int x, int y) {
 		Integer factor = values[y][x];
-		if (factor == NO_WAY) {
+		if (factor.equals(this.noWay)) {
 			return null;
 		}
 
@@ -95,16 +97,10 @@ public abstract class MatrizMap implements MapReader {
 		}
 	}
 
-	/**
-	 * @return the mAX_X
-	 */
 	public int getMAX_X() {
 		return MAX_X;
 	}
 
-	/**
-	 * @return the mAX_Y
-	 */
 	public int getMAX_Y() {
 		return MAX_Y;
 	}

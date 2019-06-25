@@ -13,6 +13,8 @@ import br.com.carlettisolucoes.bestway.reader.MatrizMap;
 import br.com.carlettisolucoes.bestway.reader.TextMap;
 import br.com.carlettisolucoes.bestway.router.BestWay;
 import br.com.carlettisolucoes.bestway.router.Router;
+import br.com.carlettisolucoes.bestway.way.Way;
+import br.com.carlettisolucoes.bestway.way.WayId;
 
 public class App {
 
@@ -20,17 +22,33 @@ public class App {
 
 	// Way startpoint;
 
-	MatrizMap reader;
-
 	public static void main(String[] args) {
 		App app = new App();
 
-		app.reader = new TextMap(); // TODO, create factory
 		List<Way> map = new ArrayList<>();
 		InputStream is = null;
 		try {
 			is = new FileInputStream(Paths.get("./samples/map.txt").toFile());
-			map = app.reader.read(is);
+			MatrizMap reader = new TextMap(is); // TODO, create factory
+			map = reader.read();
+
+			// int indexDestination = map.indexOf(new Way(new WayId(30, 19), 0)); // TODO
+			// bring from configuration file
+			int indexDestination = map.indexOf(new Way(new WayId(4, 4), 0)); // TODO bring from configuration file
+			app.destination = map.get(indexDestination);
+			Way startpoint = map.get(0); // TODO bring from configuration file
+
+			// app.populateBestLength(app.startpoint, 0, ways);
+
+			// List<Way> route = new ArrayList<>();
+			// app.findBestRoute(route, app.destination);
+
+			Router router = new BestWay(startpoint, app.destination);
+			List<Way> route = router.findBestRoute();
+			System.out.println(route);
+
+			app.writeHtml(route, reader);
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,34 +62,19 @@ public class App {
 			}
 		}
 
-		// int indexDestination = map.indexOf(new Way(new WayId(30, 19), 0)); // TODO bring from configuration file
-		int indexDestination = map.indexOf(new Way(new WayId(4, 4), 0)); // TODO bring from configuration file
-		app.destination = map.get(indexDestination);
-		Way startpoint = map.get(0); // TODO bring from configuration file
-
-		// app.populateBestLength(app.startpoint, 0, ways);
-
-		// List<Way> route = new ArrayList<>();
-		// app.findBestRoute(route, app.destination);
-
-		Router router = new BestWay(startpoint, app.destination);
-		List<Way> route = router.findBestRoute();
-		System.out.println(route);
-
-		app.writeHtml(route);
 	}
 
-	public void writeHtml(Way highlight) {
-		writeHtml(Arrays.asList(highlight));
+	public void writeHtml(Way highlight, MatrizMap matriz) {
+		writeHtml(Arrays.asList(highlight), matriz);
 	}
 
-	public void writeHtml(List<Way> highlights) {
+	public void writeHtml(List<Way> highlights, MatrizMap matriz) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<table>");
-		for (int y = 0; y < reader.getMAX_Y(); y++) {
+		for (int y = 0; y < matriz.getMAX_Y(); y++) {
 			sb.append("<tr>");
-			for (int x = 0; x < reader.getMAX_X(); x++) {
-				Way way = reader.getWay(x, y);
+			for (int x = 0; x < matriz.getMAX_X(); x++) {
+				Way way = matriz.getWay(x, y);
 				if (way == null) {
 					sb.append("<td></td>");
 					continue;

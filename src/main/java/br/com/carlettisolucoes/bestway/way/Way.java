@@ -1,4 +1,4 @@
-package br.com.carlettisolucoes.bestway;
+package br.com.carlettisolucoes.bestway.way;
 
 import java.io.Serializable;
 import java.util.ArrayList;

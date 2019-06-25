@@ -3,7 +3,7 @@ package br.com.carlettisolucoes.bestway.router;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.carlettisolucoes.bestway.Way;
+import br.com.carlettisolucoes.bestway.way.Way;
 
 public class BestWay implements Router {
 

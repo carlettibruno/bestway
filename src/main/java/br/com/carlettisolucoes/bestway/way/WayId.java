@@ -1,13 +1,13 @@
-package br.com.carlettisolucoes.bestway;
+package br.com.carlettisolucoes.bestway.way;
 
 import java.io.Serializable;
 
 public class WayId implements Serializable {
-	
+
 	private static final long serialVersionUID = 4203153761490535420L;
 
 	Integer x;
-	
+
 	Integer y;
 
 	public WayId(Integer x, Integer y) {
