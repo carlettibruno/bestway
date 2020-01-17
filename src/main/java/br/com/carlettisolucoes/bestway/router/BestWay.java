@@ -4,15 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.carlettisolucoes.bestway.way.Way;
+import br.com.carlettisolucoes.bestway.writer.Html;
 
 public class BestWay implements Router {
 
 	private Way origin, destination;
 
+	private Html html; //TODO (writer thing)
+
 	public BestWay(Way origin, Way destination) {
 		this.origin = origin;
 		this.destination = destination;
 	}
+
+	public BestWay(Way origin, Way destination, Html html) {
+		this.origin = origin;
+		this.destination = destination;
+		this.html = html;
+	}	
 
 	@Override
 	public List<Way> findBestRoute() {
@@ -28,7 +37,7 @@ public class BestWay implements Router {
 			return;
 		}
 		System.out.println("Current: " + way);
-		// writeHtml(way);
+		html.write(way);
 		way.setLength(newLength);
 		if (way.equals(destination)) {
 			System.out.println(way.getLength());
@@ -42,7 +51,7 @@ public class BestWay implements Router {
 		if (way.equals(this.origin)) {
 			return;
 		}
-		// writeHtml(way);
+		html.write(way);
 		findBestRoute(bestRoute, way.getBestWay());
 	}
 
